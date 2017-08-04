@@ -1,9 +1,8 @@
 require_relative 'data'
 require_relative 'data_parser'
 require 'pry'
+require 'json'
 
-
-if ARGV.any?
 
   data1 = DataParser.parse('source1.csv')
   data2 = DataParser.parse('source2.csv')
@@ -18,30 +17,66 @@ combined_data = []
     end
   end
 
-
-command = ARGV.first
-options = ARGV[1..-1]
-
-#Case conditional where using ARGV to ask a question and prompt a certain response
-case command
-when "purple"
   total = []
   combined_data.select do |person| 
-    if person[0].has_hair_color(command)
+    if person[0].has_hair_color("purple")
       total << person[1].spend.to_i
     end
   end
-  puts "The total amount spent toward people with #{command} hair"
-  p total.reduce(:+)
-when "4+ days"
-  counter = 0
-    data2.each do |row| 
-      binding.pry
-    if data2.count(row.campaign_id) > 4
+  puts "spent #{total.reduce(:+)} on people with purple hair"
+
+
+ 
+  new_set = data2.each_with_object(Hash.new(0)) { |row,counts| counts[row.campaign_id] += 1 }
+
+counter = 0
+  new_set.each do |key, value|
+    if value > 4
       counter +=1
     end
   end
-  puts "#{counter} campaigns spent on 4 + days"
-end
-end
   
+  puts "#{counter} campaigns spent on more than 4 days"
+
+ # new_set_H = data2.each_with_object(Hash.new(0)) { |row,counts| counts[row.actions["H"]] && counts[row.actions[""action""]==""clicks""] += 1 }
+ # p new_set_H
+
+counter = 0
+data2.each do |row|
+  JSON.parse(row.actions).each do |hash1|
+  if hash1.has_key?("H") && hash1.has_value?("clicks")
+    counter +=1
+  end
+end
+end
+puts "Source H reported on clicks #{counter} times"
+
+collection = []
+data2.each do |row|
+  JSON.parse(row.actions).each do |hash1|
+  if hash1.has_value?("junk") || hash1.has_value?("noise")
+    collection << hash1
+  end
+end
+end
+junk = {}
+noise = {}
+collection.each do |hash_|
+  if hash_.values[1] == "junk"
+    junk = junk.merge(hash_){ |k, a_value, b_value| a_value + b_value }
+  elsif hash_.values[1] == "noise"
+    noise = noise.merge(hash_){ |k, a_value, b_value| a_value + b_value }
+  end
+end
+
+more_junk_than_noise = []
+junk.each do |junk|
+  noise.each do |noise|
+  if junk[0] == noise[0]
+    if junk[1] > noise[1]
+      more_junk_than_noise << junk
+    end
+  end
+  end
+end
+p more_junk_than_noise
