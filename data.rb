@@ -40,5 +40,10 @@ class DataObject
     end
   end
 
+  def state_based_in(state)
+    if self.audience.include?(state)
+      self
+    end
+  end
 end
 

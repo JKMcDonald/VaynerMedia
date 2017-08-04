@@ -17,13 +17,13 @@ combined_data = []
     end
   end
 
-  total = []
+  total = 0
   combined_data.select do |person| 
     if person[0].has_hair_color("purple")
-      total << person[1].spend.to_i
+      total += person[1].spend.to_i
     end
   end
-  puts "spent #{total.reduce(:+)} on people with purple hair"
+  puts "spent #{total} on people with purple hair"
 
 
  
@@ -80,3 +80,74 @@ junk.each do |junk|
   end
 end
 p more_junk_than_noise
+
+
+
+#What was the total Cost per view for all video ads?
+views = 0
+spend = 0
+data2.each do |row|
+  counter = 0
+  JSON.parse(row.actions).each do |hash_info|
+    if hash_info.has_value?("views")
+        views += hash_info.values[0].to_i
+        counter +=1
+      end
+  end 
+  if counter > 0 
+   spend += row.spend.to_i
+  end
+end
+
+views
+spend
+
+301096/2267471 
+puts "13 cents for every view of a video add"
+
+#How many source B Conversions were there for campaigns targeting NY?
+newyork = []
+data1.each do |row|
+  if row.state_based_in("NY")
+    newyork << row
+  end
+end
+
+new_york_campaigns = []
+data2.each do |row|
+newyork.each do |campaign|
+  if campaign.campaign_id == row.campaign_id
+    new_york_campaigns << row
+  end
+end
+end
+
+conversions = 0
+new_york_campaigns.each do |info|
+JSON.parse(info.actions).each do |hash_data|
+  if hash_data.has_value?("conversions") && hash_data.has_key?("B")
+    conversions += hash_data.values[0].to_i
+  end
+end
+end
+
+p conversions
+
+#Which combination of state and hair color had the best CPM? Divide the total number of impressions the ad will make by 1,000. For example, if your ad would make 10,000 impressions, you would divide 10,000 by 1,000 to get 10. 3. Divide the total cost of running the ad by the result from Step 2 to calculate the CPM for the ad. - smallbusiness.chron.com/calculate-cpm-787.html
+
+
+total = {}
+counter = 0
+combined_data.each do |campaign|
+  unless campaign[1].spend.to_i == 0 || campaign[0].impressions.to_i == 0
+    if total.key?(campaign[0].campaign_id)
+      total["#{campaign[0].campaign_id}"+"#{counter}"] = campaign[1].spend.to_i/(campaign[0].impressions.to_i/1000.0)
+      counter += 1
+    else
+  total[campaign[0].campaign_id] = campaign[1].spend.to_i/(campaign[0].impressions.to_i/1000.0)
+  end
+  end
+end
+p total.min_by{|k,v| v}
+
+#blue hair in Nevada gets the most bang for their buck
