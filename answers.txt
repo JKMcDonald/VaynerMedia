@@ -1,0 +1,18 @@
+1. what was the total spent against people with purple hair?
+2. how many campaigns spent on more than 4 days?
+3. how many times did source H report on clicks?
+4. which sources reported more "junk" than "noise"?
+5. what was the total cost per view for all video ads, truncated to two decimal places?
+6. how many source B conversions were there for campaigns targeting NY?
+7. what combination of state and hair color had the best CPM?
+
+
+The answers are as follows:
+
+1. They Spent $926,121 on people with purple hair
+2. 122 campaigns spend on more than 4 days
+3. Source H reported on clicks 623 times
+4. Source D, J, and E all reported on more junk than noise
+5. 13 cents for every view of a video advertisement
+6. 394
+7. Blue Hair in Nevada had the lowest CPM (which I assumed was best)
